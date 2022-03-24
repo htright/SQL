@@ -22,3 +22,12 @@
 
 ## 10. 테이블&데이터 핸들링
 
+
+# 오류해결
+
+## CREATE FUNCTION 실행시 "This function has none of DETERMINISTIC, NO SQL, or READS SQL" 오류 
+
+show global variables like 'log_bin_trust_function_creators';
+ # 생성할 수 있는 부분이 OFF처리 설정됨
+ SET GLOBAL log_bin_trust_function_creators = 1; //ON
+#SET GLOBAL log_bin_trust_function_creators = 0; //OFF

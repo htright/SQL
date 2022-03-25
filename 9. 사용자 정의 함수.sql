@@ -1,33 +1,99 @@
-#CREATE FUNCTION 실행시 "This function has none of DETERMINISTIC, NO SQL, or READS SQL" 오류 해결
+#Table 생성
+CREATE TABLE Person(
+	ID int,
+    Name text,
+    Age int
+);
 
-show global variables like 'log_bin_trust_function_creators';
- -- 생성할 수 있는 부분이 OFF처리 설정됨
- SET GLOBAL log_bin_trust_function_creators = 1; //ON
-#SET GLOBAL log_bin_trust_function_creators = 0; //OFF
+#Table 삭제
+Drop table Person;
 
-# 전체가 하나로 끝나야함 ( 오류발생)
---  CREATE FUNCTION twosum (
--- 	num1 int,
---     num2 int
---  ) RETURN int
---  BEGIN
--- 	DECLARE sum_ int;
---     SET sum_ = num1 + num2;
---     RETURN sum_;
--- END; 
+ALTER TABLE Person2
+RENAME TO Person;
 
-# $$로 구분자
+# Column 추가
+ALTER TABLE person
+ADD COLUMN Region text;
 
-delimiter $$ 
-CREATE FUNCTION twosum (
-	num1 int,
-    num2 int
-) returns int
-BEGIN
-	declare sum_ int;
-    set sum_ = num1 + num2;
-	RETURN sum_;
-END $$ 
-delimiter ;
+# Column name 변경
+ALTER TABLE Person
+CHANGE COLUMN region city text;
 
+# column 삭제
+ALTER TABLE person
+DROP COLUMN city;
+
+# column 추가
+ALTER TABLE person
+ADD COLUMN city text;
+
+-- 컬럼 데이터 추가
+#
+INSERT INTO person
+	(ID, NAME, AGE, CITY)
+    VALUES(1, 'Hyuntae', 29, 'Incheon');
+
+#
+INSERT INTO person
+	(ID, NAME)
+	VALUE(2, 'Heesoo');
+
+#
+INSERT INTO person
+	(ID, NAME, AGE, CITY)
+	VALUE(3, 'Bill', 33, 'Seoul'),
+		(4, 'Tom', 31, 'Seoul');
+
+#
+INSERT INTO person
+	VALUES(5, 'Brad', 32, 'Dokdo');
+
+SELECT *
+FROM person;
+
+-- 
+# 전체 삭제
+DELETE FROM person;
+
+#
+DELETE FROM person
+WHERE AGE is null;
+
+# AGE 31이 아닌 값 제거
+DELETE FROM person
+WHERE AGE <> 31;
+
+SELECT *
+FROM person;
+
+--
+#
+INSERT INTO PERSON
+	VALUES(1, 'AB', 33, 'KR'),
+		(2, 'BC', 33, 'KR'),
+        (3, 'ND', 36, 'US'),
+        (4, 'ME', 31, 'US');
+
+# 
+UPDATE person
+SET CITY = 'SEOUL'
+WHERE CITY = 'KR';
+
+SELECT *
+FROM person;
+
+-- 테이블 핸들링(제약조건)
+CREATE TABLE person(
+	ID INT auto_increment primary key,
+    NAME text NOT NULL,
+    Age int not null
+);
+
+# ID 안적어도됨 (제약조건했으니)
+INSERT INTO person
+	(NAME, AGE)
+    VALUES('c', 31);
+
+SELECT *
+FROM person;
 
